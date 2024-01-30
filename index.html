@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication Example</title>
+    <style>
+        /* Impressive CSS styling for all pages */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="userSection">
+        <!-- Dynamic content will be updated here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check local storage for user data
+            const userData = JSON.parse(localStorage.getItem('userData'));
+
+            // Display user section accordingly
+            if (userData) {
+                showUserProfile(userData);
+            } else {
+                showLoginRegister();
+            }
+        });
+
+        function showLoginRegister() {
+            // Display login and registration forms
+            document.getElementById('userSection').innerHTML = `
+                <h1>Login or Register</h1>
+                <form id="loginForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                    <button type="button" onclick="login()">Login</button>
+                </form>
+                <form id="registrationForm">
+                    <label for="newUsername">New Username:</label>
+                    <input type="text" id="newUsername" required>
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" required>
+                    <button type="button" onclick="register()">Register</button>
+                </form>
+            `;
+        }
+
+        function showUserProfile(userData) {
+            // Display user profile and options
+            document.getElementById('userSection').innerHTML = `
+                <h1>Welcome, ${userData.username}!</h1>
+                <div>
+                    <button onclick="editProfile()">Edit Profile</button>
+                    <button onclick="deleteAccount()">Delete Account</button>
+                    <button onclick="signOut()">Sign Out</button>
+                </div>
+            `;
+        }
+
+        function register() {
+            // Get input values
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            // Save user data to local storage
+            const userData = { username: newUsername, password: newPassword };
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // Display user profile and options
+            showUserProfile(userData);
+        }
+
+        function login() {
+            // Get input values
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Check if user data matches
+            const savedUserData = JSON.parse(localStorage.getItem('userData'));
+
+            if (savedUserData && savedUserData.username === username && savedUserData.password === password) {
+                // Display user profile and options
+                showUserProfile(savedUserData);
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        function editProfile() {
+            alert('Edit profile functionality goes here');
+            // Add your edit profile logic
+        }
+
+        function deleteAccount() {
+            // Clear local storage and show login/register section
+            localStorage.removeItem('userData');
+            showLoginRegister();
+        }
+
+        function signOut() {
+            // Clear local storage and show login/register section
+            localStorage.removeItem('userData');
+            showLoginRegister();
+        }
+    </script>
+</body>
+</html>
